@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package gameslobby;
+
+option go_package = "./gameslobby";
+
+message EntryRequest {
+  int32 MachineType = 1;
+}
+
+message EntryResult {
+  int64 Code = 1;     // 0=處理成功 非0則對應錯誤代碼
+  string Message = 2; // 處理訊息
+}
+
+service GamesLobby {
+  rpc Entry(EntryRequest) returns (EntryResult);
+}

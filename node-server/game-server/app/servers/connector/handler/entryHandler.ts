@@ -4,6 +4,12 @@ export default function (app: Application) {
     return new Handler(app);
 }
 
+var parseArgs = require('minimist');
+var messages = require('./gl_pb');
+var services = require('./gl_grpc_pb');
+
+var grpc = require('@grpc/grpc-js');
+
 export class Handler {
     constructor(private app: Application) {
 
@@ -16,7 +22,17 @@ export class Handler {
      * @param  {Object}   session current session object
      * @return {Void}
      */
-    async entry(msg: any, session: FrontendSession) {
+    async entry(msg: any, session: FrontendSession) {   
+        var target = 'localhost:8080';
+        var client = new services.GamesLobbyClient(target,
+                                                grpc.credentials.createInsecure());
+        var request = new messages.EntryRequest();
+        request.setMachinetype(10);
+        client.entry(request, function(err, response) {
+            console.log('Greeting:', response.getMessage());
+        });
+
+
         return { code: 200, msg: 'game server is ok.' };
     }
 
