@@ -17,4 +17,5 @@ lib-cov/
 coverage.html
 .DS_Store
 .idea/*
-dist
+**/dist/app/*
+**/dist/*.js
