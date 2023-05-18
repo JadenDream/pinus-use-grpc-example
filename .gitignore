@@ -19,3 +19,4 @@ coverage.html
 .idea/*
 **/dist/app/*
 **/dist/*.js
+**/dist/protos/*

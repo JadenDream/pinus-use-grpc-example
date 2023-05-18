@@ -5,8 +5,9 @@ export default function (app: Application) {
     return new Handler(app);
 }
 
-var messages = require('./gl_pb');
-var services = require('./gl_grpc_pb');
+
+var messages = require('../../../../protos/gl_pb');
+var services = require('../../../../protos/gl_grpc_pb');
 
 var grpc = require('@grpc/grpc-js');
 
