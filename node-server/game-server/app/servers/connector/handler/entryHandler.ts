@@ -1,15 +1,9 @@
-import { registerResolver } from '@grpc/grpc-js/build/src/resolver';
 import { Application, FrontendSession } from 'pinus';
+import { GameLobbyClient, EntryRequest } from '../../../util/gameLobbyClient';
 
 export default function (app: Application) {
     return new Handler(app);
 }
-
-
-var messages = require('../../../../protos/gl_pb');
-var services = require('../../../../protos/gl_grpc_pb');
-
-var grpc = require('@grpc/grpc-js');
 
 export class Handler {
     constructor(private app: Application) {
@@ -24,22 +18,29 @@ export class Handler {
      * @return {Void}
      */
     async entry(msg: any, session: FrontendSession) {   
-        var target = 'localhost:8080';
-        var client = new services.GamesLobbyClient(target,
-                                                grpc.credentials.createInsecure());
-        var request = new messages.EntryRequest();
+        var client = GameLobbyClient.getInstance('localhost:8080').getClient();
+        var request = new EntryRequest();
         request.setMachinetype(10);
         
-        var a = new Promise(function(resolve, reject) {
+        const promise = new Promise(function(resolve, reject) {
 			client.entry(request, function(err, response) {
-				resolve(response.getMessage());
+                if (err) {
+                    console.log('grpc error:', err);
+                    reject(err);
+                }
+                resolve({ code: response.getCode(), msg: response.getMessage() + ', hello world - gs' })
             });
 		});
         
-        return a.then(function(value) {
-            var rmsg = value + ', hello world - gs';
-            return { code: 200, msg: rmsg };
-        });
+        return promise
+            .then(function(value) {
+                console.log('grpc response:', value);
+                return value;
+            })
+            .catch(function(err) {
+                console.error(err);
+                return { code: 500, msg: 'Entry Error! - gls' };
+            });
     }
 
     /**

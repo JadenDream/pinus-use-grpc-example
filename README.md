@@ -22,3 +22,8 @@ golang go-zero 框架下作為 grpc Server
 採用 go-zero 框架運行的 grpc server 端 示例
 
 安裝啟動範例請參閱 golang-server/README.md
+
+## 驗證
+啟動後，進入web頁面
+http://127.0.0.1:3001/index.html
+點及 "Test Game Server", 如返回 hello world - gls, hello world - gs" 即表示連接遊戲服務器且使用grpc通過gls返回成功
