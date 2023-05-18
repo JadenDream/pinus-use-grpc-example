@@ -1,10 +1,10 @@
+import { registerResolver } from '@grpc/grpc-js/build/src/resolver';
 import { Application, FrontendSession } from 'pinus';
 
 export default function (app: Application) {
     return new Handler(app);
 }
 
-var parseArgs = require('minimist');
 var messages = require('./gl_pb');
 var services = require('./gl_grpc_pb');
 
@@ -28,12 +28,17 @@ export class Handler {
                                                 grpc.credentials.createInsecure());
         var request = new messages.EntryRequest();
         request.setMachinetype(10);
-        client.entry(request, function(err, response) {
-            console.log('Greeting:', response.getMessage());
+        
+        var a = new Promise(function(resolve, reject) {
+			client.entry(request, function(err, response) {
+				resolve(response.getMessage());
+            });
+		});
+        
+        return a.then(function(value) {
+            var rmsg = value + ', hello world - gs';
+            return { code: 200, msg: rmsg };
         });
-
-
-        return { code: 200, msg: 'game server is ok.' };
     }
 
     /**

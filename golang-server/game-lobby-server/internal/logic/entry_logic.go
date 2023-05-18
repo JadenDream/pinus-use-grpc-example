@@ -28,6 +28,6 @@ func (l *EntryLogic) Entry(in *gameslobby.EntryRequest) (*gameslobby.EntryResult
 
 	return &gameslobby.EntryResult{
 		Code: 0,
-		Message:  "game lobby server is ok.",
+		Message:  "hello world - gls",
 	}, nil
 }
