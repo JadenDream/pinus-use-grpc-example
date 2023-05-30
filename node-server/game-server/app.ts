@@ -24,6 +24,7 @@ app.configure('production|development', 'connector', function () {
             useDict: true,
             useProtobuf: true
         });
+    app.filter(new pinus.filters.timeout(8000, 1000));
 });
 
 // 载入测试的组件

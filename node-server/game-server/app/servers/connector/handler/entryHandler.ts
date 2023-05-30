@@ -21,9 +21,11 @@ export class Handler {
         var client = GameLobbyClient.getInstance('localhost:8080').getClient();
         var request = new EntryRequest();
         request.setMachinetype(10);
-        
+
         const promise = new Promise(function(resolve, reject) {
-			client.entry(request, function(err, response) {
+            var timeAllowed = 5000
+            var timeout = new Date( Date.now() + timeAllowed )
+			client.entry(request, {deadline: timeout}, function(err, response) {
                 if (err) {
                     console.log('grpc error:', err);
                     reject(err);
